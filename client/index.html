@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>chatbot_socketio</title>
+  </head>
+  <body>
+    <div class="form_chat">
+      <h1>Chatbot with socketio</h1>
+      <div class="mess"></div>
+      <form class="submited">
+        <input
+          type="text"
+          name="message"
+          id="message"
+          placeholder="enter your text"
+          autocomplete="off"
+        />
+        <button type="submit">send</button>
+      </form>
+    </div>
+    <script>
+      const socket = io();
+      const form = document.querySelector("form");
+      const input = document.querySelector("input");
+      const message = document.querySelector(".mess");
+      form.addEventListener("submit", function(ev){
+        ev.preventDefault()
+        if(input.value !== ''){
+         socket.emit('message',input.value);
+        input.value = '';
+        }else{
+            socket.emit('message','Error-occurred!')
+        }
+        })
+        socket.on('message', function(data){
+        const li = document.createElement("li");
+        li.textContent = data;
+        message.appendChild (li);        
+        message.scrollTo = message.scrollHeight //window.scrollTo(0, document.body.scrollHeight)
+      });
+    </script>
+  </body>
+</html>
